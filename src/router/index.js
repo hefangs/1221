@@ -72,19 +72,19 @@ export const constantRoutes = [
         path: 'attr',
         name: 'Attr',
         component: () => import('@/views/product/Attr'),
-        meta: { title: 'Attr', icon: 'tree' }
-      },
-      {
-        path: 'sku',
-        name: 'Sku',
-        component: () => import('@/views/product/Sku'),
-        meta: { title: 'Sku', icon: 'table' }
+        meta: { title: '平台属性管理', icon: 'tree' }
       },
       {
         path: 'spu',
         name: 'Spu',
         component: () => import('@/views/product/Spu'),
-        meta: { title: 'Spu', icon: 'example' }
+        meta: { title: 'Spu管理', icon: 'example' }
+      },
+      {
+        path: 'sku',
+        name: 'Sku',
+        component: () => import('@/views/product/Sku'),
+        meta: { title: 'Sku管理', icon: 'table' }
       }
     ]
   },
