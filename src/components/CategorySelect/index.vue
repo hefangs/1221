@@ -48,8 +48,15 @@ export default {
     },
     // 一级目录Select发生改变触发的回调
     async handle1() {
+      // 清除二级、三级目录数据
+      this.list2 = []
+      this.list3 = []
+      this.cForm.category2Id = ''
+      this.cForm.category3Id = ''
       // 解构category1Id 或者传参直接写：this.cForm.category1Id
       const { category1Id } = this.cForm
+      // 向父组件传递数据
+      this.$emit('getCategoryId', { categoryId: category1Id, level: 1 })
       const result = await this.$API.attr.reqCategory2List(category1Id)
       if (result.code === 200) {
         this.list2 = result.data
@@ -57,14 +64,23 @@ export default {
     },
     // 二级目录Select发生改变触发的回调
     async handle2() {
+      // 清除三级目录数据
+      this.list3 = []
+      this.cForm.category3Id = ''
       const { category2Id } = this.cForm
+      // 向父组件传递数据
+      this.$emit('getCategoryId', { categoryId: category2Id, level: 2 })
       const result = await this.$API.attr.reqCategory3List(category2Id)
       if (result.code === 200) {
         this.list3 = result.data
       }
     },
     // 三级目录Select发生改变触发的回调
-    handle3() {}
+    handle3() {
+      const { category3Id } = this.cForm
+      // 向父组件传递数据
+      this.$emit('getCategoryId', { categoryId: category3Id, level: 3 })
+    }
   }
 }
 </script>
