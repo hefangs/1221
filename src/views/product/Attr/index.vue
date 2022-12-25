@@ -33,10 +33,10 @@
           </el-table-column>
         </el-table>
       </div>
-      <div v-if="!isShowTable">
-        <el-form :inline="true" class="demo-form-inline">
+      <div v-else>
+        <el-form :inline="true" class="demo-form-inline" :model="attrInfo">
           <el-form-item label="属性名">
-            <el-input placeholder="请输入属性名" label-width="80px" />
+            <el-input v-model="attrInfo.attrName" placeholder="请输入属性名" label-width="80px" />
           </el-form-item>
         </el-form>
         <el-button type="primary" icon="el-icon-plus">添加属性值</el-button>
@@ -62,7 +62,19 @@ export default {
       category2Id: '',
       category3Id: '',
       attrList: [],
-      isShowTable: true
+      isShowTable: true,
+      attrInfo: {
+        attrName: '',
+        attrValueList: [
+          {
+            attrId: 0,
+            valueName: ''
+          }
+        ],
+        categoryId: 0,
+        categoryLevel: 3,
+        id: 0
+      }
     }
   },
   methods: {
