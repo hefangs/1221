@@ -7,9 +7,15 @@ export const reqCategory1List = () =>
 // GET /admin/product/getCategory2/{category1Id}
 
 export const reqCategory2List = (category1Id) =>
-  request({ url: `admin/product/getCategory2/${category1Id}`, method: 'get' })
+  request({ url: `admin/product/getCategory2/${category1Id}`, method: 'GET' })
 
 // 获取三级分类数据
 // GET /admin/product/getCategory3/{category2Id}
 export const reqCategory3List = (category2Id) =>
   request({ url: `/admin/product/getCategory3/${category2Id}`, method: 'GET' })
+
+// 获取平台属性接口
+// GET /admin/product/attrInfoList/{category1Id}/{category2Id}/{category3Id}
+export const reqAttrList = (category1Id, category2Id, category3Id) =>
+  request({ url: `/admin/product/attrInfoList/${category1Id}/${category2Id}/${category3Id}`, method: 'GET' })
+
