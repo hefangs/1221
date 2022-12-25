@@ -4,23 +4,52 @@
       <CategorySelect @getCategoryId="getCategoryId" />
     </el-card>
     <el-card>
-      <el-button type="primary" icon="el-icon-plus" style="margin-bottom:20px;">添加属性</el-button>
-      <el-table :data="attrList" border style="width: 100%">
-        <el-table-column type="index" label="序号" width="180"></el-table-column>
-        <el-table-column prop="attrName" label="属性名称" width="180"></el-table-column>
-        <el-table-column prop="date" label="属性值列表" width="width">
-          <template v-slot="{row}">
-            <el-tag type="success" v-for="al in row.attrValueList" :key="al.id" style="margin: 5px">{{al.valueName}}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="date" label="操作" width="180">
-          <template v-slot="{row}">
-            <el-button type="warning" icon="el-icon-edit" size="mini"></el-button>
-            <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card >
+      <div v-if="isShowTable">
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          style="margin-bottom:20px;"
+          :disabled="!category3Id"
+          @click="isShowTable=false"
+        >添加属性</el-button>
+        <el-table :data="attrList" border style="width: 100%">
+          <el-table-column type="index" label="序号" width="180" />
+          <el-table-column prop="attrName" label="属性名称" width="180" />
+          <el-table-column prop="date" label="属性值列表" width="width">
+            <template v-slot="{row}">
+              <el-tag
+                v-for="al in row.attrValueList"
+                :key="al.id"
+                type="success"
+                style="margin: 5px"
+              >{{ al.valueName }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="date" label="操作" width="180">
+            <template v-slot="{row}">
+              <el-button type="warning" icon="el-icon-edit" size="mini" @click="isShowTable=false" />
+              <el-button type="danger" icon="el-icon-delete" size="mini" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div v-if="!isShowTable">
+        <el-form :inline="true" class="demo-form-inline">
+          <el-form-item label="属性名">
+            <el-input placeholder="请输入属性名" label-width="80px" />
+          </el-form-item>
+        </el-form>
+        <el-button type="primary" icon="el-icon-plus">添加属性值</el-button>
+        <el-button type="primary" @click="isShowTable=true">取消</el-button>
+        <el-table border style="margin:20px 0;">
+          <el-table-column type="index" label="序号" width="100" align="center" />
+          <el-table-column prop="date" label="属性值名称" width="width" />
+          <el-table-column prop="date" label="操作" width="300" al ign="center" />
+        </el-table>
+        <el-button type="primary">确定</el-button>
+        <el-button type="primary" @click="isShowTable=true">取消</el-button>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -32,7 +61,8 @@ export default {
       category1Id: '',
       category2Id: '',
       category3Id: '',
-      attrList: []
+      attrList: [],
+      isShowTable: true
     }
   },
   methods: {
@@ -52,7 +82,11 @@ export default {
     },
     async getAttrList() {
       const { category1Id, category2Id, category3Id } = this
-      const result = await this.$API.attr.reqAttrList(category1Id, category2Id, category3Id)
+      const result = await this.$API.attr.reqAttrList(
+        category1Id,
+        category2Id,
+        category3Id
+      )
       if (result.code === 200) {
         this.attrList = result.data
       }
