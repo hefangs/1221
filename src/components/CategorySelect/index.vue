@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="cForm" :inline="true" class="demo-form-inline">
+    <el-form :model="cForm" :inline="true" class="demo-form-inline" :disabled="show">
       <el-form-item label="一级目录">
         <el-select v-model="cForm.category1Id" placeholder="请选择" @change="handle1">
           <el-option v-for="c1 in list1" :key="c1.id" :label="c1.name" :value="c1.id" />
@@ -23,6 +23,9 @@
 <script>
 export default {
   name: 'CategorySelect',
+  // 父组件给子组件传递props:三级联动和isShowTable 取反
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['show'],
   data() {
     return {
       list1: [], // 一级分类数据
