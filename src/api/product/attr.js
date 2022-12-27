@@ -25,3 +25,8 @@ export const reqAttrList = (category1Id, category2Id, category3Id) =>
 // POST /admin/product/saveAttrInfo
 export const reqAddOrUpdateAttr = (data) =>
   request({ url: `/admin/product/saveAttrInfo`, method: 'POST', data })
+
+// 删除属性
+// DELETE /admin/product/deleteAttr/{attrId}
+export const reqDeleteAttr = (attrId) =>
+  request({ url: `/admin/product/deleteAttr/${attrId}`, method: 'DELETE' })
