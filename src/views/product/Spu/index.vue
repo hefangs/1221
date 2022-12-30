@@ -5,7 +5,7 @@
     </el-card>
     <el-card>
       <div v-show="scene == 0">
-        <el-button type="primary" icon="el-icon-plus">添加SPU</el-button>
+        <el-button type="primary" icon="el-icon-plus" :disabled="!category3Id" @click="addSpu">添加SPU</el-button>
         <el-table :data="spuList" style="width: 100%;margin:20px 0;" border>
           <el-table-column type="index" label="序号" width="100" align="center" />
           <el-table-column prop="spuName" label="spu名称" width="width" />
@@ -16,7 +16,7 @@
                 <el-button type="success" icon="el-icon-plus" />
               </el-tooltip>
               <el-tooltip class="item" effect="light" content="修改spu" placement="bottom">
-                <el-button type="warning" icon="el-icon-edit" />
+                <el-button type="warning" icon="el-icon-edit" @click="editSpu(row)" />
               </el-tooltip>
               <el-tooltip class="item" effect="light" content="查看当前spu全部sku列表" placement="bottom">
                 <el-button type="info" icon="el-icon-info" />
@@ -96,6 +96,12 @@ export default {
     handleCurrentChange(pager) {
       this.page = pager
       this.getSpuList(this.page)
+    },
+    addSpu() {
+      this.scene = 1
+    },
+    editSpu(row) {
+      this.scene = 1
     }
   }
 }
