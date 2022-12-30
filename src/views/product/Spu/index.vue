@@ -39,7 +39,7 @@
           @current-change="handleCurrentChange"
         />
       </div>
-      <SpuForm v-show="scene == 1" />
+      <SpuForm v-show="scene == 1" ref="spuForm" @ChangeScene="ChangeScene" />
       <SkuForm v-show="scene == 2" />
     </el-card>
   </div>
@@ -102,6 +102,11 @@ export default {
     },
     editSpu(row) {
       this.scene = 1
+      // 父组件通过$refs获取子组件的方法
+      this.$refs.spuForm.initSpuData(row)
+    },
+    ChangeScene(scene) {
+      this.scene = scene
     }
   }
 }

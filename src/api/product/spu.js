@@ -8,3 +8,28 @@ export const reqSpuList = (page, limit, category3Id) =>
     method: 'GET',
     params: { category3Id }
   })
+
+// 获取spu基本信息
+// GET /admin/product/getSpuById/{spuId}
+export const reqSpu = (spuId) =>
+  request({ url: `/admin/product/getSpuById/${spuId}`, method: 'GET' })
+
+// 获取品牌信息
+// GET /admin/product/baseTrademark/getTrademarkList
+export const reqTrademarkList = () =>
+  request({
+    url: `/admin/product/baseTrademark/getTrademarkList`,
+    method: 'GET'
+  })
+
+// 获取spu图片
+// GET /admin/product/spuImageList/{spuId}
+export const reqImageList = (spuId) =>
+  request({
+    url: `/admin/product/spuImageList/${spuId}`,
+    method: 'GET'
+  })
+// 获取平台全部销售属性
+// /admin/product/baseSaleAttrList
+export const reqBaseSaleAttrList = () =>
+  request({ url: `/admin/product/baseSaleAttrList`, method: 'GET' })
