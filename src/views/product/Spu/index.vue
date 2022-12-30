@@ -4,18 +4,26 @@
       <CategorySelect :show="!show" @getCategoryId="getCategoryId" />
     </el-card>
     <el-card>
-      <div>
+      <div v-show="scene == 0">
         <el-button type="primary" icon="el-icon-plus">添加SPU</el-button>
-        <el-table style="width: 100%;margin:20px 0;" border>
+        <el-table :data="spuList" style="width: 100%;margin:20px 0;" border>
           <el-table-column type="index" label="序号" width="100" align="center" />
-          <el-table-column prop="prop" label="spu名称" width="width" />
-          <el-table-column prop="prop" label="spu描述" width="width" />
+          <el-table-column prop="spuName" label="spu名称" width="width" />
+          <el-table-column prop="description" label="spu描述" width="width" />
           <el-table-column prop="prop" label="操作" width="width">
             <template v-slot="{row}">
-              <el-button type="success" icon="el-icon-plus" />
-              <el-button type="warning" icon="el-icon-edit" />
-              <el-button type="info" icon="el-icon-info" />
-              <el-button type="danger" icon="el-icon-delete" />
+              <el-tooltip class="item" effect="light" content="添加sku" placement="bottom">
+                <el-button type="success" icon="el-icon-plus" />
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" content="修改spu" placement="bottom">
+                <el-button type="warning" icon="el-icon-edit" />
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" content="查看当前spu全部sku列表" placement="bottom">
+                <el-button type="info" icon="el-icon-info" />
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" content="删除spu" placement="bottom">
+                <el-button type="danger" icon="el-icon-delete" />
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -31,15 +39,21 @@
           @current-change="handleCurrentChange"
         />
       </div>
-      <div>2</div>
-      <div>3</div>
+      <SpuForm v-show="scene == 1" />
+      <SkuForm v-show="scene == 2" />
     </el-card>
   </div>
 </template>
 
 <script>
+import SpuForm from './SpuForm'
+import SkuForm from './SkuForm'
 export default {
   name: 'Spu',
+  components: {
+    SpuForm,
+    SkuForm
+  },
   data() {
     return {
       show: true,
@@ -48,7 +62,9 @@ export default {
       category3Id: '',
       page: 1,
       limit: 10,
-      total: 0
+      total: 0,
+      spuList: [],
+      scene: 0 // 0:代表展示spu列表数据，1：添加spu|修改spu，2：添加sku
     }
   },
   methods: {
@@ -65,7 +81,14 @@ export default {
         this.getSpuList()
       }
     },
-    getSpuList() {},
+    async getSpuList(pager = 1) {
+      this.page = pager
+      const { page, limit, category3Id } = this
+      const result = await this.$API.spu.reqSpuList(page, limit, category3Id)
+      // console.log(result)
+      this.spuList = result.data.records
+      this.total = result.data.total
+    },
     handleSizeChange(limit) {
       this.limit = limit
       this.getSpuList()
