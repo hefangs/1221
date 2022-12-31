@@ -118,11 +118,11 @@ export default {
   methods: {
     // 父组件的自定义事件接受1,2,3级菜单传过来的id
     getCategoryId({ categoryId, level }) {
-      if (level == 1) {
+      if (level === 1) {
         this.category1Id = categoryId
         this.category2Id = ''
         this.category3Id = ''
-      } else if (level == 2) {
+      } else if (level === 2) {
         this.category2Id = categoryId
         this.category3Id = ''
       } else {
@@ -138,7 +138,7 @@ export default {
         category2Id,
         category3Id
       )
-      if (result.code == 200) {
+      if (result.code === 200) {
         this.attrList = result.data
       }
     },
@@ -185,7 +185,7 @@ export default {
         return
       }
       const isRepeat = this.attrInfo.attrValueList.some((item) => {
-        if (row != item) {
+        if (row !== item) {
           // eslint-disable-next-line
           return row.valueName == item.valueName
         }
@@ -216,7 +216,7 @@ export default {
       // 过滤掉空的属性值&删除编辑和添加属性值带上的flag（flag不需要提交到服务器）
       this.attrInfo.attrValueList = this.attrInfo.attrValueList.filter(
         (item) => {
-          if (item.valueName != '') {
+          if (item.valueName !== '') {
             delete item.flag
             return true
           }
@@ -224,7 +224,7 @@ export default {
       )
       const result = await this.$API.attr.reqAddOrUpdateAttr(this.attrInfo)
       // console.log(result)
-      if (result.code == 200) {
+      if (result.code === 200) {
         this.$notify.success('添加成功')
         // 显示table
         this.isShowTable = true
@@ -244,7 +244,7 @@ export default {
         // eslint-disable-next-line
         .then(async () => {
           const result = await this.$API.attr.reqDeleteAttr(row.id)
-          if (result.code == 200) {
+          if (result.code === 200) {
             this.$notify.success('删除成功!')
             this.getAttrList()
           }

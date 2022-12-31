@@ -69,11 +69,11 @@ export default {
   },
   methods: {
     getCategoryId({ categoryId, level }) {
-      if (level == 1) {
+      if (level === 1) {
         this.category1Id = categoryId
         this.category2Id = ''
         this.category3Id = ''
-      } else if (level == 2) {
+      } else if (level === 2) {
         this.category2Id = categoryId
         this.category3Id = ''
       } else {

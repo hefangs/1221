@@ -121,7 +121,7 @@ export default {
       this.page = pager
       const { page, limit } = this
       const result = await this.$API.trademark.reqTradeMarkList(page, limit)
-      if (result.code == 200) {
+      if (result.code === 200) {
         this.total = result.data.total
         this.list = result.data.records
       }
@@ -138,7 +138,7 @@ export default {
     },
     //  图片上传之前
     beforeAvatarUpload(file) {
-      const isJPG = file.type == 'image/jpeg'
+      const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
         this.$notify.error('上传头像图片只能是 JPG 格式!')
@@ -158,7 +158,7 @@ export default {
           const result = await this.$API.trademark.reqAddOrUpdateTradeMark(
             this.tmForm
           )
-          if (result.code == 200) {
+          if (result.code === 200) {
             this.$notify.success(
               this.tmForm.id ? '修改品牌成功' : '添加品牌成功'
             )
@@ -185,7 +185,7 @@ export default {
         // eslint-disable-next-line space-before-function-paren
         .then(async () => {
           const result = await this.$API.trademark.reqDeleteTradeMark(row.id)
-          if (result.code == 200) {
+          if (result.code === 200) {
             this.$notify.success('删除成功')
             this.getPageList(this.list.length > 1 ? this.page : this.page - 1)
           }

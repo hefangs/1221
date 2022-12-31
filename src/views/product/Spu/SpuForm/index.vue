@@ -105,11 +105,11 @@ export default {
     async initSpuData(spu) {
       const spuResult = await this.$API.spu.reqSpu(spu.id)
       // console.log(spuResult)
-      if (spuResult.code == 200) {
+      if (spuResult.code === 200) {
         this.spu = spuResult.data
       }
       const spuImageListResult = await this.$API.spu.reqImageList(spu.id)
-      if (spuImageListResult.code == 200) {
+      if (spuImageListResult.code === 200) {
         const imgList = spuImageListResult.data
         imgList.forEach((item) => {
           item.name = item.imgName
@@ -118,11 +118,11 @@ export default {
         this.spuImageList = imgList
       }
       const trademarkListResult = await this.$API.spu.reqTrademarkList()
-      if (trademarkListResult.code == 200) {
+      if (trademarkListResult.code === 200) {
         this.trademarkList = trademarkListResult.data
       }
       const baseSaleAttrListResult = await this.$API.spu.reqBaseSaleAttrList()
-      if (baseSaleAttrListResult.code == 200) {
+      if (baseSaleAttrListResult.code === 200) {
         this.baseSaleAttrList = baseSaleAttrListResult.data
       }
     }
