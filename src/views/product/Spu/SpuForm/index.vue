@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-self-closing -->
 <template>
   <div>
     <el-form ref="form" label-width="80px" :model="spu">
@@ -19,6 +20,7 @@
           :file-list="spuImageList"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
+          :on-success="handleSuccess"
         >
           <i class="el-icon-plus" />
         </el-upload>
@@ -27,15 +29,39 @@
         </el-dialog>
       </el-form-item>
       <el-form-item label="销售属性">
-        <el-select placeholder="还有3个未选择" value>
-          <el-option label="label" value="value" />
+        <el-select v-model="attrId" :placeholder="`还有${unSelect.length}个未选择`">
+          <el-option v-for="item in unSelect" :key="item.id" :label="item.name" :value="item.id" />
         </el-select>
-        <el-button type="primary" icon="el-icon-plus">添加销售属性</el-button>
-        <el-table style="width: 100%" border>
+        <el-button type="primary" icon="el-icon-plus" :disabled="!attrId">添加销售属性</el-button>
+        <el-table style="width: 100%" border :data="spu.spuSaleAttrList">
           <el-table-column type="index" label="序号" width="100" align="center" />
-          <el-table-column prop="prop" label="属性名" width="width" />
-          <el-table-column prop="prop" label="属性值名称列表" width="width" />
-          <el-table-column prop="prop" label="操作" width="width" />
+          <el-table-column prop="saleAttrName" label="属性名" width="100" align="center" />
+          <el-table-column prop="prop" label="属性值名称列表" width="width">
+            <template v-slot="{row}">
+              <el-tag
+                v-for="item in row.spuSaleAttrValueList"
+                :key="item.id"
+                closable
+                :disable-transitions="false"
+                @close="handleClose(row)"
+              >{{ item.saleAttrValueName }}</el-tag>
+              <el-input
+                v-if="row.inputVisible"
+                ref="saveTagInput"
+                v-model="row.inputValue"
+                class="input-new-tag"
+                size="small"
+                @keyup.enter.native="handleInputConfirm"
+                @blur="handleInputConfirm"
+              ></el-input>
+              <el-button v-else class="button-new-tag" size="small" @click="showInput">添加</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="prop" label="操作" width="100" align="center">
+            <template v-slot="{row}">
+              <el-button type="danger" icon="el-icon-delete" />
+            </template>
+          </el-table-column>
         </el-table>
       </el-form-item>
       <el-form-item>
@@ -56,6 +82,7 @@ export default {
       spuImageList: [],
       trademarkList: [],
       baseSaleAttrList: [],
+      attrId: '',
       spu: {
         category3Id: 0,
         description: '',
@@ -90,9 +117,23 @@ export default {
       }
     }
   },
+  computed: {
+    unSelect() {
+      const result = this.baseSaleAttrList.filter((item1) => {
+        return this.spu.spuSaleAttrList.every((item2) => {
+          return item1.name !== item2.saleAttrName
+        })
+      })
+      return result
+    }
+  },
   methods: {
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
+      this.spuImageList = fileList
+    },
+    handleSuccess(response, file, fileList) {
+      this.spuImageList = fileList
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
@@ -131,4 +172,22 @@ export default {
 </script>
 
 <style scoped>
+</style>
+
+<style>
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
 </style>
