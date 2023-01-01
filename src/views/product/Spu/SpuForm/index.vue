@@ -61,10 +61,10 @@
                 v-model="row.inputValue"
                 class="input-new-tag"
                 size="small"
-                @keyup.enter.native="handleInputConfirm"
-                @blur="handleInputConfirm"
+                @keyup.enter.native="$event.target.blur"
+                @blur="handleInputConfirm(row)"
               ></el-input>
-              <el-button v-else class="button-new-tag" size="small" @click="showInput">添加</el-button>
+              <el-button v-else class="button-new-tag" size="small" @click="showInput(row)">添加</el-button>
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="100" align="center">
@@ -185,6 +185,30 @@ export default {
         spuSaleAttrValueList: []
       }
       this.spu.spuSaleAttrList.push(newSaleAttr)
+      this.attrIdAndName = ''
+    },
+    showInput(row) {
+      // console.log(row)
+      this.$set(row, 'inputVisible', true)
+      this.$set(row, 'inputValue', '')
+    },
+    handleInputConfirm(row) {
+      const { baseSaleAttrId, inputValue } = row
+      if (inputValue.trim() === '') {
+        this.$notify.error('属性值不能为空')
+        return
+      }
+      const result = row.spuSaleAttrValueList.some(
+        (item) => item.saleAttrValueName === inputValue // 属性值不能重复,
+      )
+      // console.log(result)
+      if (result) {
+        this.$notify.error('属性值不能重复')
+        return
+      }
+      const newSaleAttrValue = { baseSaleAttrId, saleAttrValueName: inputValue }
+      row.spuSaleAttrValueList.push(newSaleAttrValue)
+      row.inputVisible = false
     }
   }
 }
