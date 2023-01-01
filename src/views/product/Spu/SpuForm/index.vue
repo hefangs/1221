@@ -29,10 +29,20 @@
         </el-dialog>
       </el-form-item>
       <el-form-item label="销售属性">
-        <el-select v-model="attrId" :placeholder="`还有${unSelect.length}个未选择`">
-          <el-option v-for="item in unSelect" :key="item.id" :label="item.name" :value="item.id" />
+        <el-select v-model="attrIdAndName" :placeholder="`还有${unSelect.length}个未选择`">
+          <el-option
+            v-for="item in unSelect"
+            :key="item.id"
+            :label="item.name"
+            :value="`${item.id}:${item.name}`"
+          />
         </el-select>
-        <el-button type="primary" icon="el-icon-plus" :disabled="!attrId">添加销售属性</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          :disabled="!attrIdAndName"
+          @click="addSaleAttr"
+        >添加销售属性</el-button>
         <el-table style="width: 100%" border :data="spu.spuSaleAttrList">
           <el-table-column type="index" label="序号" width="100" align="center" />
           <el-table-column prop="saleAttrName" label="属性名" width="100" align="center" />
@@ -82,7 +92,7 @@ export default {
       spuImageList: [],
       trademarkList: [],
       baseSaleAttrList: [],
-      attrId: '',
+      attrIdAndName: '',
       spu: {
         category3Id: 0,
         description: '',
@@ -166,6 +176,15 @@ export default {
       if (baseSaleAttrListResult.code === 200) {
         this.baseSaleAttrList = baseSaleAttrListResult.data
       }
+    },
+    addSaleAttr() {
+      const [baseSaleAttrId, saleAttrName] = this.attrIdAndName.split(':')
+      const newSaleAttr = {
+        baseSaleAttrId,
+        saleAttrName,
+        spuSaleAttrValueList: []
+      }
+      this.spu.spuSaleAttrList.push(newSaleAttr)
     }
   }
 }
