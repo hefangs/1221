@@ -58,3 +58,10 @@ export const reqAddOrUpdateSpu = (spuInfo) => {
 // DELETE /admin/product/deleteSpu/{spuId}
 export const reqDeleteSpu = (spuId) =>
   request({ url: `/admin/product/deleteSpu/${spuId}`, method: 'DELETE' })
+
+// 获取销售属性
+// GET /admin/product/spuSaleAttrList/{spuId}
+export const reqSpuSaleAttrList = (spuId) =>
+  request({ url: `/admin/product/spuSaleAttrList/${spuId}`, method: 'GET' })
+
+// POST / admin / product / saveSkuInfo
