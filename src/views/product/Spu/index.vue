@@ -98,11 +98,12 @@ export default {
     },
     addSpu() {
       this.scene = 1
+      this.$refs.spuForm.initSpuAddData(this.category3Id)
     },
     editSpu(row) {
       this.scene = 1
       // 父组件通过$refs获取子组件的方法
-      this.$refs.spuForm.initSpuData(row)
+      this.$refs.spuForm.initSpuEditData(row)
     },
     ChangeScene({ scene, flag }) {
       this.scene = scene

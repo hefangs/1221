@@ -101,7 +101,7 @@ export default {
       spu: {
         category3Id: 0,
         description: '',
-        tmId: 0,
+        tmId: '',
         spuName: '',
         spuImageList: [
           // {
@@ -155,10 +155,23 @@ export default {
       this.dialogVisible = true
     },
     cancel() {
-      this.$emit('ChangeScene', 0)
+      this.$emit('ChangeScene', { scene: 0, flag: '' })
+      Object.assign(this._data, this.$options.data())
     },
-    // 初始化数据，有4个请求
-    async initSpuData(spu) {
+    // 父组件点击添加初始化数据，有2个请求
+    async initSpuAddData(category3Id) {
+      this.spu.category3Id = category3Id
+      const trademarkListResult = await this.$API.spu.reqTrademarkList()
+      if (trademarkListResult.code === 200) {
+        this.trademarkList = trademarkListResult.data
+      }
+      const baseSaleAttrListResult = await this.$API.spu.reqBaseSaleAttrList()
+      if (baseSaleAttrListResult.code === 200) {
+        this.baseSaleAttrList = baseSaleAttrListResult.data
+      }
+    },
+    // 父组件点击修改初始化数据，有4个请求
+    async initSpuEditData(spu) {
       const spuResult = await this.$API.spu.reqSpu(spu.id)
       // console.log(spuResult)
       if (spuResult.code === 200) {
@@ -236,7 +249,7 @@ export default {
           this.$emit('ChangeScene', { scene: 0, flag: '添加' })
         } else {
           this.$notify.success('修改成功')
-          this.$emit('ChangeScene', { scene: 0, flag: '添加' })
+          this.$emit('ChangeScene', { scene: 0, flag: '修改' })
         }
       }
       Object.assign(this._data, this.$options.data())
