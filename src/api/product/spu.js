@@ -33,3 +33,23 @@ export const reqImageList = (spuId) =>
 // /admin/product/baseSaleAttrList
 export const reqBaseSaleAttrList = () =>
   request({ url: `/admin/product/baseSaleAttrList`, method: 'GET' })
+
+// 保存spu信息
+// POST  /admin/product/saveSpuInfo
+// 更改spu信息
+// POST /admin/product/updateSpuInfo
+export const reqAddOrUpdateSpu = (spuInfo) => {
+  if (spuInfo.id) {
+    return request({
+      url: `/admin/product/updateSpuInfo`,
+      method: 'POST',
+      data: spuInfo
+    })
+  } else {
+    return request({
+      url: `/admin/product/saveSpuInfo`,
+      method: 'POST',
+      data: spuInfo
+    })
+  }
+}

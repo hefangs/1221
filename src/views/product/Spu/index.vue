@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card>
-      <CategorySelect :show="!show" @getCategoryId="getCategoryId" />
+      <CategorySelect :show="scene!==0" @getCategoryId="getCategoryId" />
     </el-card>
     <el-card>
       <div v-show="scene == 0">
@@ -56,7 +56,6 @@ export default {
   },
   data() {
     return {
-      show: true,
       category1Id: '',
       category2Id: '',
       category3Id: '',
@@ -105,8 +104,13 @@ export default {
       // 父组件通过$refs获取子组件的方法
       this.$refs.spuForm.initSpuData(row)
     },
-    ChangeScene(scene) {
+    ChangeScene({ scene, flag }) {
       this.scene = scene
+      if (flag === '添加') {
+        this.getSpuList()
+      } else {
+        this.getSpuList(this.page)
+      }
     }
   }
 }

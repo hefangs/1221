@@ -47,13 +47,13 @@
           <el-table-column type="index" label="序号" width="100" align="center" />
           <el-table-column prop="saleAttrName" label="属性名" width="100" align="center" />
           <el-table-column prop="prop" label="属性值名称列表" width="width">
-            <template v-slot="{row}">
+            <template v-slot="{row,$index}">
               <el-tag
                 v-for="item in row.spuSaleAttrValueList"
                 :key="item.id"
                 closable
                 :disable-transitions="false"
-                @close="handleClose(row)"
+                @close="handleClose(row,$index)"
               >{{ item.saleAttrValueName }}</el-tag>
               <el-input
                 v-if="row.inputVisible"
@@ -68,14 +68,19 @@
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="100" align="center">
-            <template v-slot="{row}">
-              <el-button type="danger" icon="el-icon-delete" />
+            <template v-slot="{row,$index}">
+              <el-popconfirm
+                :title="`你确定要删除:${row.saleAttrName}?`"
+                @onConfirm="deleteSaleAttrList($index)"
+              >
+                <el-button slot="reference" type="danger" icon="el-icon-delete" />
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="addOrUpdateSpu">保存</el-button>
         <el-button @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -209,6 +214,32 @@ export default {
       const newSaleAttrValue = { baseSaleAttrId, saleAttrValueName: inputValue }
       row.spuSaleAttrValueList.push(newSaleAttrValue)
       row.inputVisible = false
+    },
+    handleClose(row, index) {
+      row.spuSaleAttrValueList.splice(index, 1)
+    },
+    deleteSaleAttrList(index) {
+      this.spu.spuSaleAttrList.splice(index, 1)
+    },
+    async addOrUpdateSpu() {
+      this.spu.spuImageList = this.spuImageList.map((item) => {
+        return {
+          imgName: item.name,
+          imgUrl: (item.response && item.response.data) || item.imgUrl
+        }
+      })
+      const result = await this.$API.spu.reqAddOrUpdateSpu(this.spu)
+      // console.log(result)
+      if (result.code === 200) {
+        if (!this.spu.id) {
+          this.$notify.success('添加成功')
+          this.$emit('ChangeScene', { scene: 0, flag: '添加' })
+        } else {
+          this.$notify.success('修改成功')
+          this.$emit('ChangeScene', { scene: 0, flag: '添加' })
+        }
+      }
+      Object.assign(this._data, this.$options.data())
     }
   }
 }
