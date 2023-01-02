@@ -21,8 +21,16 @@
               <el-tooltip class="item" effect="light" content="查看当前spu全部sku列表" placement="bottom">
                 <el-button type="info" icon="el-icon-info" />
               </el-tooltip>
-              <el-tooltip class="item" effect="light" content="删除spu" placement="bottom">
-                <el-button type="danger" icon="el-icon-delete" />
+              <el-tooltip
+                class="item"
+                effect="light"
+                content="删除spu"
+                placement="bottom"
+                style="margin-left:10px;"
+              >
+                <el-popconfirm :title="`你确定要删除:${row.spuName}?`" @onConfirm="deleteSpu(row)">
+                  <el-button slot="reference" type="danger" icon="el-icon-delete" />
+                </el-popconfirm>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -111,6 +119,14 @@ export default {
         this.getSpuList()
       } else {
         this.getSpuList(this.page)
+      }
+    },
+    async deleteSpu(row) {
+      // console.log(row)
+      const result = await this.$API.spu.reqDeleteSpu(row.id)
+      if (result.code === 200) {
+        this.$notify.success('删除成功')
+        this.getSpuList(this.spuList.length > 1 ? this.page : this.page - 1)
       }
     }
   }
