@@ -13,7 +13,7 @@
           <el-table-column prop="prop" label="操作" width="width">
             <template v-slot="{row}">
               <el-tooltip class="item" effect="light" content="添加sku" placement="bottom">
-                <el-button type="success" icon="el-icon-plus" @click="addSku" />
+                <el-button type="success" icon="el-icon-plus" @click="addSku(row)" />
               </el-tooltip>
               <el-tooltip class="item" effect="light" content="修改spu" placement="bottom">
                 <el-button type="warning" icon="el-icon-edit" @click="editSpu(row)" />
@@ -48,7 +48,7 @@
         />
       </div>
       <SpuForm v-show="scene == 1" ref="spuForm" @ChangeScene="ChangeScene" />
-      <SkuForm v-show="scene == 2" />
+      <SkuForm v-show="scene == 2" ref="skuForm" @ChangeScene="ChangeScene" />
     </el-card>
   </div>
 </template>
@@ -129,8 +129,10 @@ export default {
         this.getSpuList(this.spuList.length > 1 ? this.page : this.page - 1)
       }
     },
-    addSku() {
+    addSku(row) {
+      // console.log(row)
       this.scene = 2
+      this.$refs.skuForm.initSkuAddData(this.category1Id, this.category2Id, row)
     }
   }
 }
