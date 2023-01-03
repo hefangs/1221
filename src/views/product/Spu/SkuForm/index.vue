@@ -47,11 +47,26 @@
         </el-form>
       </el-form-item>
       <el-form-item label="图片列表">
-        <el-table style="width: 100%" border>
-          <el-table-column type="selection" prop="prop" label="label" width="80" />
-          <el-table-column prop="prop" label="图片" width="width" />
-          <el-table-column prop="prop" label="名称" width="width" />
-          <el-table-column prop="prop" label="操作" width="width" />
+        <el-table
+          style="width: 100%"
+          border
+          :data="imgList"
+          @selection-change="handleSelectionChange"
+        >
+          >
+          <el-table-column type="selection" prop="prop" label="label" width="80" align="center" />
+          <el-table-column prop="prop" label="图片" width="width" align="center">
+            <template v-slot="{row}">
+              <img :src="row.imgUrl" alt style="width:100px;height:100px;" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="imgName" label="名称" width="width" align="center" />
+          <el-table-column prop="prop" label="操作" width="width" align="center">
+            <template v-slot="{row}">
+              <el-button v-if="row.isDefault == 0" type="primary" @click="changeDefault(row)">设置默认</el-button>
+              <el-button v-else>默认</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-form-item>
       <el-form-item>
@@ -107,7 +122,8 @@ export default {
           // }
         ],
         weight: ''
-      }
+      },
+      list: []
     }
   },
   methods: {
@@ -129,7 +145,11 @@ export default {
         spu.category3Id
       )
       if (result1.code === 200) {
-        this.imgList = result1.data
+        const arrList = result1.data
+        arrList.forEach((item) => {
+          item.isDefault = 0
+        })
+        this.imgList = arrList
       }
       if (result2.code === 200) {
         this.saleAttrList = result2.data
@@ -137,6 +157,16 @@ export default {
       if (result3.code === 200) {
         this.attrList = result3.data
       }
+    },
+    handleSelectionChange(val) {
+      this.list = val
+    },
+    changeDefault(row) {
+      this.imgList.forEach((item) => {
+        item.isDefault = 0
+      })
+      row.isDefault = 1
+      this.skuInfo.skuDefaultImg = row.imgUrl
     }
   }
 }
