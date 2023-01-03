@@ -70,7 +70,7 @@
         </el-table>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">确定</el-button>
+        <el-button type="primary" @click="saveSku">确定</el-button>
         <el-button @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -90,7 +90,7 @@ export default {
         spuId: 0,
         tmId: 0,
         category3Id: 0,
-        price: 0,
+        price: '',
         skuAttrValueList: [
           // {
           //   attrId: 0,
@@ -129,6 +129,7 @@ export default {
   methods: {
     cancel() {
       this.$emit('ChangeScene', { scene: 0, flag: '' })
+      Object.assign(this._data, this.$options.data())
     },
     // 父组件点击添加初始化数据，有3个请求
     async initSkuAddData(category1Id, category2Id, spu) {
@@ -167,6 +168,46 @@ export default {
       })
       row.isDefault = 1
       this.skuInfo.skuDefaultImg = row.imgUrl
+    },
+    async saveSku() {
+      // const arr = []
+      // this.attrList.forEach((item) => {
+      //   if (item.attrIdAndValueId) {
+      //     const [attrId, valueId] = item.attrIdAndValueId.split(':')
+      //     const newObj = { attrId, valueId }
+      //     arr.push(newObj)
+      //   }
+      //   this.skuInfo.skuAttrValueList = arr
+      // })
+      const { attrList, saleAttrList, list, skuInfo } = this
+      skuInfo.skuAttrValueList = attrList.reduce((prev, item) => {
+        if (item.attrIdAndValueId) {
+          const [attrId, valueId] = item.attrIdAndValueId.split(':')
+          prev.push({ attrId, valueId })
+        }
+        return prev
+      }, [])
+      skuInfo.skuSaleAttrValueList = saleAttrList.reduce((prev, item) => {
+        if (item.attrIdAndValueId) {
+          const [saleAttrId, saleAttrValueId] = item.attrIdAndValueId.split(':')
+          prev.push({ saleAttrId, saleAttrValueId })
+        }
+        return prev
+      }, [])
+      skuInfo.skuImageList = list.map((item) => {
+        return {
+          imgName: item.imgName,
+          imgUrl: item.imgUrl,
+          isDefault: item.isDefault,
+          spuImgId: item.id
+        }
+      })
+      const result = await this.$API.spu.reqAddSku(skuInfo)
+      // console.log(result)
+      if (result.code === 200) {
+        this.$emit('ChangeScene', { scene: 0, flag: '' })
+        this.$notify.success('保存成功')
+      }
     }
   }
 }

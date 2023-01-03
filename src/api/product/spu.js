@@ -64,4 +64,11 @@ export const reqDeleteSpu = (spuId) =>
 export const reqSpuSaleAttrList = (spuId) =>
   request({ url: `/admin/product/spuSaleAttrList/${spuId}`, method: 'GET' })
 
-// POST / admin / product / saveSkuInfo
+// 添加sku
+// POST /admin/product/saveSkuInfo
+export const reqAddSku = (skuInfo) =>
+  request({
+    url: `/admin/product/saveSkuInfo`,
+    method: 'POST',
+    data: skuInfo
+  })
