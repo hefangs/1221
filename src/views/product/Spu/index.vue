@@ -51,8 +51,8 @@
       <SpuForm v-show="scene == 1" ref="spuForm" @ChangeScene="ChangeScene" />
       <SkuForm v-show="scene == 2" ref="skuForm" @ChangeScene="ChangeScene" />
     </el-card>
-    <el-dialog :title="`${spu.spuName}的sku列表`" :visible.sync="dialogTableVisible">
-      <el-table :data="skuList" border>
+    <el-dialog :title="`${spu.spuName}的sku列表`" :visible.sync="dialogTableVisible" @close="close">
+      <el-table v-loading="loading" :data="skuList" border>
         <el-table-column property="skuName" label="名称" align="center" />
         <el-table-column property="price" label="价格" width="100" align="center" />
         <el-table-column property="weight" label="重量" align="center" width="100" />
@@ -77,6 +77,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       spu: {},
       dialogTableVisible: false,
       skuList: [],
@@ -157,8 +158,13 @@ export default {
       const result = await this.$API.spu.reqSkuList(row.id)
       if (result.code === 200) {
         this.skuList = result.data
+        this.loading = false
         // console.log(result)
       }
+    },
+    close() {
+      this.loading = true
+      this.skuList = []
     }
   }
 }
