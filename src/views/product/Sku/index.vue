@@ -14,11 +14,17 @@
       <el-table-column prop="price" label="价格(元)" width="80" align="center" />
       <el-table-column prop="prop" label="操作" width="width" align="center">
         <template v-slot="{row}">
-          <el-button type="success" size="mini" icon="el-icon-top"></el-button>
-          <el-button type="success" size="mini" icon="el-icon-bottom"></el-button>
-          <el-button type="warning" size="mini" icon="el-icon-edit"></el-button>
-          <el-button type="info" size="mini" icon="el-icon-info"></el-button>
-          <el-button type="danger" size="mini" icon="el-icon-delete"></el-button>
+          <el-button
+            v-if="row.isSale == 0"
+            type="success"
+            size="mini"
+            icon="el-icon-bottom"
+            @click="onSale(row)"
+          ></el-button>
+          <el-button v-else type="success" size="mini" icon="el-icon-top" @click="cancelSale(row)"></el-button>
+          <el-button type="warning" size="mini" icon="el-icon-edit" @click="updateSku(row)"></el-button>
+          <el-button type="info" size="mini" icon="el-icon-info" @click="getSkuInfo(row)"></el-button>
+          <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteSku(row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -33,6 +39,28 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <el-drawer title="详情" :show-close="false" :visible.sync="drawer" size="40%">
+      <el-form ref="form" label-width="120px" :data="skuInfo">
+        <el-form-item label="名称:" style>{{ skuInfo.skuName }}</el-form-item>
+        <el-form-item label="描述:">{{ skuInfo.skuDesc }}</el-form-item>
+        <el-form-item label="价格:">{{ skuInfo.price }} 元</el-form-item>
+        <el-form-item label="平台属性:">
+          <el-tag
+            v-for="item in skuInfo.skuAttrValueList"
+            :key="item.id"
+            style="margin:0 5px;"
+            type="success"
+          >{{ item.attrName }}-{{ item.valueName }}</el-tag>
+        </el-form-item>
+        <el-form-item label="商品图片:">
+          <el-carousel style="border:1px #ccc solid;">
+            <el-carousel-item v-for="item in skuInfo.skuImageList" :key="item.id">
+              <img :src="item.imgUrl" alt />
+            </el-carousel-item>
+          </el-carousel>
+        </el-form-item>
+      </el-form>
+    </el-drawer>
   </div>
 </template>
 
@@ -44,7 +72,9 @@ export default {
       page: 1,
       limit: 10,
       total: 0,
-      skuList: []
+      skuList: [],
+      skuInfo: {},
+      drawer: false
     }
   },
   mounted() {
@@ -63,10 +93,47 @@ export default {
       this.page = pager
       const { page, limit } = this
       const result = await this.$API.sku.reqSkuList(page, limit)
-      console.log(result)
+      // console.log(result)
       if (result.code === 200) {
         this.skuList = result.data.records
         this.total = result.data.total
+      }
+    },
+    async onSale(row) {
+      // console.log(row)
+      const result = await this.$API.sku.reqOnSale(row.id)
+      if (result.code === 200) {
+        // eslint-disable-next-line
+        row.isSale = 1
+        this.$notify.success('上架成功')
+      }
+    },
+    async cancelSale(row) {
+      const result = await this.$API.sku.reqCancelSale(row.id)
+      if (result.code === 200) {
+        // eslint-disable-next-line
+        row.isSale = 0
+        this.$notify.success('下架成功')
+      }
+    },
+    updateSku(row) {
+      this.$notify.info('正在开发中！')
+    },
+    async getSkuInfo(row) {
+      this.drawer = true
+      const result = await this.$API.sku.reqSkuInfo(row.id)
+      // console.log(result)
+      if (result.code === 200) {
+        this.skuInfo = result.data
+      }
+    },
+    async deleteSku(row) {
+      // console.log(row)
+      const result = await this.$API.sku.reqDeleteSku(row.id)
+      // console.log(result)
+      if (result.code === 200) {
+        this.$notify.success('删除成功')
+        this.getSkuList()
       }
     }
   }
@@ -75,3 +142,4 @@ export default {
 
 <style scoped>
 </style>
+
