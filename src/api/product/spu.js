@@ -72,3 +72,8 @@ export const reqAddSku = (skuInfo) =>
     method: 'POST',
     data: skuInfo
   })
+
+// 回去sku列表数据
+// GET /admin/product/findBySpuId/{spuId}
+export const reqSkuList = (spuId) =>
+  request({ url: `/admin/product/findBySpuId/${spuId}`, method: 'GET' })

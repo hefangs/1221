@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-self-closing -->
 <template>
   <div>
     <el-card>
@@ -19,7 +20,7 @@
                 <el-button type="warning" icon="el-icon-edit" @click="editSpu(row)" />
               </el-tooltip>
               <el-tooltip class="item" effect="light" content="查看当前spu全部sku列表" placement="bottom">
-                <el-button type="info" icon="el-icon-info" />
+                <el-button type="info" icon="el-icon-info" @click="handleSkuList(row)" />
               </el-tooltip>
               <el-tooltip
                 class="item"
@@ -50,6 +51,18 @@
       <SpuForm v-show="scene == 1" ref="spuForm" @ChangeScene="ChangeScene" />
       <SkuForm v-show="scene == 2" ref="skuForm" @ChangeScene="ChangeScene" />
     </el-card>
+    <el-dialog :title="`${spu.spuName}的sku列表`" :visible.sync="dialogTableVisible">
+      <el-table :data="skuList" border>
+        <el-table-column property="skuName" label="名称" align="center" />
+        <el-table-column property="price" label="价格" width="100" align="center" />
+        <el-table-column property="weight" label="重量" align="center" width="100" />
+        <el-table-column property="address" label="图片" align="center">
+          <template v-slot="{row}">
+            <img :src="row.skuDefaultImg" alt style="width:100px;height:100px;" />
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,6 +77,9 @@ export default {
   },
   data() {
     return {
+      spu: {},
+      dialogTableVisible: false,
+      skuList: [],
       category1Id: '',
       category2Id: '',
       category3Id: '',
@@ -133,6 +149,16 @@ export default {
       // console.log(row)
       this.scene = 2
       this.$refs.skuForm.initSkuAddData(this.category1Id, this.category2Id, row)
+    },
+    async handleSkuList(row) {
+      this.dialogTableVisible = true
+      this.spu = row
+      // console.log(row)
+      const result = await this.$API.spu.reqSkuList(row.id)
+      if (result.code === 200) {
+        this.skuList = result.data
+        // console.log(result)
+      }
     }
   }
 }

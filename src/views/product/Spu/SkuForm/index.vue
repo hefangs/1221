@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-self-closing -->
 <template>
   <div>
     <el-form ref="form" label-width="80px">
@@ -207,6 +208,7 @@ export default {
       if (result.code === 200) {
         this.$emit('ChangeScene', { scene: 0, flag: '' })
         this.$notify.success('保存成功')
+        Object.assign(this._data, this.$options.data())
       }
     }
   }
