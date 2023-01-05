@@ -45,13 +45,14 @@ export default {
 }
 .card-content {
   font-size: 30px;
-  padding: 10px;
+  padding: 2px 0;
 }
 .card-chart {
-  padding: 0 0 15px 0;
+  padding: 2px 0;
+  height: 100px;
 }
 .card-footer {
-  padding-top: 15px;
+  padding-top: 10px;
   border-top: 1px solid #eee;
   font-size: 18px;
 }

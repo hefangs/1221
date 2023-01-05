@@ -20,7 +20,7 @@
         <el-card>
           <Detail title="访问量" count="12306">
             <template slot="charts">
-              <div class="line" />
+              <LineChart />
             </template>
             <template slot="footer">
               <span>日访问量&nbsp;1234</span>
@@ -32,10 +32,7 @@
         <el-card>
           <Detail title="支付笔数" count="88460">
             <template slot="charts">
-              <span>周同比&nbsp;</span>
-              <i class="el-icon-top" />
-              <span>日同比&nbsp;</span>
-              <i class="el-icon-bottom" />
+              <BarChart />
             </template>
             <template slot="footer">
               <span>日支付笔数&nbsp;5783</span>
@@ -47,10 +44,7 @@
         <el-card>
           <Detail title="运营活动效果" count="78">
             <template slot="charts">
-              <span>周同比&nbsp;</span>
-              <i class="el-icon-top" />
-              <span>日同比&nbsp;</span>
-              <i class="el-icon-bottom" />
+              <ProgressChart />
             </template>
             <template slot="footer">
               <span>日销售&nbsp;5008</span>
@@ -64,10 +58,12 @@
 
 <script>
 import Detail from './Detail'
-import echarts from './echarts'
+import LineChart from './LineChart'
+import BarChart from './BarChart'
+import ProgressChart from './ProgressChart'
 export default {
   name: 'Card',
-  components: { Detail }
+  components: { Detail, LineChart, BarChart, ProgressChart }
 }
 </script>
 
