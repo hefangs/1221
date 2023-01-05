@@ -4171,7 +4171,7 @@
     "jsbn" "~0.1.0"
     "safer-buffer" "^2.1.0"
 
-"echarts@^5.4.0":
+"echarts@^5.4.1":
   "integrity" "sha512-9ltS3M2JB0w2EhcYjCdmtrJ+6haZcW6acBolMGIuf01Hql1yrIV01L1aRj7jsaaIULJslEP9Z3vKlEmnJaWJVQ=="
   "resolved" "https://registry.npmmirror.com/echarts/-/echarts-5.4.1.tgz"
   "version" "5.4.1"
