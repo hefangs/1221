@@ -14,6 +14,12 @@ export default {
       tooltip: {
         trigger: 'item'
       },
+      title: {
+        text: 'Search Eng',
+        subtext: 1048,
+        left: 'center',
+        top: 'center'
+      },
       legend: {
         top: '5%',
         left: 'center'
@@ -30,8 +36,8 @@ export default {
           },
           emphasis: {
             label: {
-              show: true,
-              fontSize: 20,
+              show: false,
+              fontSize: 40,
               fontWeight: 'bold'
             }
           },
@@ -47,6 +53,15 @@ export default {
           ]
         }
       ]
+    })
+    pieChart.on('mouseover', (params) => {
+      const { name, value } = params.data
+      pieChart.setOption({
+        title: {
+          text: name,
+          subtext: value
+        }
+      })
     })
   }
 }
