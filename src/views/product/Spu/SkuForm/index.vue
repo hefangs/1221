@@ -54,7 +54,6 @@
           :data="imgList"
           @selection-change="handleSelectionChange"
         >
-          >
           <el-table-column type="selection" prop="prop" label="label" width="80" align="center" />
           <el-table-column prop="prop" label="图片" width="width" align="center">
             <template v-slot="{row}">
