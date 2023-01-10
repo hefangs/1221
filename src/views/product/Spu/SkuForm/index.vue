@@ -94,7 +94,7 @@ export default {
         skuAttrValueList: [
           // {
           //   attrId: 0,
-          //   valueId: 0,
+          //   valueId: 0
           // }
         ],
         skuDefaultImg: '',
