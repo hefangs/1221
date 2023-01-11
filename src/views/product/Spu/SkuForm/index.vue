@@ -179,6 +179,7 @@ export default {
       //   }
       //   this.skuInfo.skuAttrValueList = arr
       // })
+
       const { attrList, saleAttrList, list, skuInfo } = this
       skuInfo.skuAttrValueList = attrList.reduce((prev, item) => {
         if (item.attrIdAndValueId) {
